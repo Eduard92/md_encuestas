@@ -67,48 +67,109 @@
                 
             </uib-tab>
             <uib-tab heading="Cuestionario">
-                <?php $index = 1; ?>
-                 <?php foreach($fields as $id_pregunta=>$field):?>
-                    <div class="form-group">
-                        <label><?=$index?>.-<?=$field['titulo']?></label>
-                        <?php switch($field['tipo']){
-                            case 'radio': 
-                                echo '<div class="radio">';
+                            <?php if($cuestionario->tabla != 1): ?>
+                            <?php $index = 1; ?>
+                            <?php foreach($fields as $id_pregunta=>$field):?>
+                                <div class="form-group">
+                                    <label class="<?=form_error('pregunta['.$id_pregunta.']')?'text-danger':''?>"><?=$index?>.-<?=$field['titulo']?></label>
+                                    
+                                    <?php if ($field['muestra']):?>
+                                    <div>
+                                    <img src="<?=base_url('files/large/'.$field['muestra'])?>" />
+                                    </div>
+                                    <?php endif;?>
+                                    <?php switch($field['tipo']){
+                                        case 'radio': 
+                                            echo '<div class="radio">';
+                                            
+                                            foreach($field['opciones'] as $opcion):
+                                                echo '<label>'.$opcion['input'].$opcion['label'].'</label> ';
+                                            endforeach;
+                                            
+                                            echo '</div>';
+                                        break;
+                                        
+                                        case 'checkbox': 
+                                            echo '<div class="checkbox">';
+                                            
+                                            foreach($field['opciones'] as $opcion):
+                                                echo '<label>'.$opcion['input'].$opcion['label'].'</label> ';
+                                            endforeach;
+                                            
+                                            echo '</div>';
+                                        break;
+                                        
+                                        case 'text': 
+                                           
+                                            
+                                            foreach($field['opciones'] as $opcion):
+                                                echo $opcion['input'];
+                                            endforeach;
+                                            
+                                           
+                                        break;
+                                    ?>
+                                       
+                                    <?php }?>
+                                    
+                                </div>
+                                <?php $index++; ?>
+                            <?php endforeach;?>
+
+                            <?php else:?> <!--Encuesta tabla -->
+                        <table class="table table-hover" style="font-size: 12px;" >
+                                <thead>
+                                    <tr>
+                                      <th></th>  
+
+                                      <?php foreach($cuestionario->respuestas as $item):?>
+                                      <th width="10%" class="text-center"><?=$item['respuesta']?></th>
+                                      <?php endforeach;?>              
+                                    </tr>
+                                </thead>
                                 
-                                foreach($field['opciones'] as $opcion):
-                                    echo '<label>'.$opcion['input'].$opcion['label'].'</label> ';
-                                endforeach;
+                                <tbody>
+                                      
+                                    <?php $index = 1; ?>
+                                    <?php foreach($fields as $id_pregunta=>$field):?>
+
+                                <tr>  
+
+                                 <td> <label class="<?=form_error('pregunta['.$id_pregunta.']')?'text-danger':''?>"><?=$index?>.-<?=$field['titulo']?></label>
+                                 </td>
+
+                                     
+
+                                      
+                                       <?php echo '<div class="radio">';
+                                            
+                                            foreach($field['opciones'] as $opcion):
+                                                echo ' <td width="10%" class="text-center"> <label>'.$opcion['input'].'</label>  </td>';
+                                            endforeach;
+                                            
+                                            echo '</div>';
+
+
+                                        ?>
+
+
+                                     
+
+                                      
+                                            
                                 
-                                echo '</div>';
-                            break;
+
+                                </tr>
+                                <?php $index++; ?>
+                                <?php endforeach;?>
+                                
+                                </tbody>
                             
-                            case 'checkbox': 
-                                echo '<div class="checkbox">';
-                                
-                                foreach($field['opciones'] as $opcion):
-                                    echo '<label>'.$opcion['input'].$opcion['label'].'</label> ';
-                                endforeach;
-                                
-                                echo '</div>';
-                            break;
-                            
-                            case 'text': 
-                               
-                                
-                                foreach($field['opciones'] as $opcion):
-                                    echo $opcion['input'];
-                                endforeach;
-                                
-                               
-                            break;
-                        ?>
-                           
-                        <?php }?>
-                       
-                        
-                    </div>
-                    <?php $index++;?>
-                <?php endforeach;?>
+                        </table>
+
+                            <?php endif?>
+
+                            <hr />
             </uib-tab>
         </uib-tabset>
      </div>

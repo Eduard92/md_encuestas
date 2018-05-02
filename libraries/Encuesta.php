@@ -12,7 +12,8 @@ class Encuesta
         ci()->load->helper('form');
         ci()->load->model(array(
             'cuestionarios/pregunta_m',
-            'encuestas/encuesta_m'
+            'encuestas/encuesta_m',
+            'encuestas/opciones_m'
         ));
     }
     public function set_values($values = array())
@@ -101,7 +102,6 @@ class Encuesta
         ci()->db->where('id_encuesta',$id_encuesta)
                 ->delete('encuesta_respuestas');
                 
-                
         if(empty($preguntas) == false)
         {
             foreach($preguntas as $id_pregunta=>$pregunta)
@@ -123,15 +123,20 @@ class Encuesta
     }
     
     /******Genera el cuestionario de preguntas dinamicas******/
-    public  function build_form($id_cuestionario,$return_html=false)
+    public  function build_form($id_cuestionario,$tipo,$return_html=false)
     {
-        $data = array();
+        if(empty($tipo)==true && $tipo != 1)
+        {
+$data = array();
         
+
+
         $preguntas = ci()->pregunta_m->select('*,cat_preguntas.id AS id_pregunta')
                         ->where('cat_preguntas.id_cuestionario',$id_cuestionario)
-                        ->join('cat_pregunta_opciones','cat_pregunta_opciones.id_pregunta = cat_preguntas.id','LEFT')
+                        ->join('cat_pregunta_opciones','cat_pregunta_opciones.id_pregunta = cat_preguntas.id','LEFT')                
                         ->order_by('ordering')
-                        ->get_all();
+                        ->get_all();                
+        
                         
         foreach($preguntas as $pregunta)
         {
@@ -173,8 +178,72 @@ class Encuesta
         }
         
         
+        return $data;            
+           
+        
+        }
+
+        
+            else
+            {
+                $data = array();
+                $preguntas_tabla = ci()->pregunta_m->select('*,cat_preguntas.id AS id_pregunta')
+                        ->where('cat_preguntas.id_cuestionario',$id_cuestionario)                
+                        ->order_by('ordering')
+                        ->get_all();
+
+                    $base_where = array(         
+                     'cat_preguntas.id_cuestionario' => $id_cuestionario,
+                     'default_cat_preguntas.tipo' => 'table' 
+                        );
+                     
+                    $respuestas = ci()->opciones_m->distinct()->select('respuesta ')
+                            ->where($base_where)
+                            ->join('cat_preguntas','cat_pregunta_opciones.id_cuestionario = cat_preguntas.id_cuestionario','LEFT')
+                            ->get_all();
+            
+
+                foreach($preguntas_tabla as $pregunta)
+                {
+               
+                            if(!isset($data[$pregunta->id_pregunta]))
+                                 {
+                                     $data[$pregunta->id_pregunta] = array(
+                                    'id'       => $pregunta->id_pregunta,
+                                    'titulo'   => $pregunta->titulo,
+                                    'opciones' => array(),
+                                    'tipo'     => $pregunta->tipo,
+                                    'obligatorio' => $pregunta->obligatorio,
+                                    'muestra' => $pregunta->muestra,
+                                    'orden'   => $pregunta->ordering,
+                                    'html'    => '',
+                                    'rules'   => 'trim'.($pregunta->obligatorio?'|required':'')
+                                      );
+                                }  
+
+
+                            foreach($respuestas as $respuesta)
+                            {
+                               
+                            $html = form_radio('pregunta['.$pregunta->id_pregunta.'][]',$respuesta->respuesta,empty($this->values[$pregunta->id_pregunta])==false && in_array($respuesta->respuesta,$this->values[$pregunta->id_pregunta]));
+                       
+                             $data[$pregunta->id_pregunta]['opciones'][] = array
+                            (
+                                'input' =>   $html
+                            );
+                             
+                            }  
+                }
+               
+           
+        }
+        
         return $data;
-    }
+
+
+            }
+
+      
     
     
 }

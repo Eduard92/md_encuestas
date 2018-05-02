@@ -323,6 +323,15 @@ class Admin extends Admin_Controller {
             //$asignacion->table_fields = $asignacion->table_fields?json_decode($asignacion->table_fields):array();
            
             $cuestionario->campos = array_merge($cuestionario->campos,$asignacion->campos?$asignacion->campos:array());
+
+            $cuestionario->tipo = $this->db->select('tabla')
+                                       ->where('id',$asignacion->id_cuestionario)
+                                       ->get('default_cat_cuestionarios')->result_array();
+
+            $cuestionario->tipo = $cuestionario->tipo['0']['tabla'];
+            
+            $cuestionario->respuestas = $this->db->where('id_cuestionario',$asignacion->id_cuestionario)
+                                        ->get('cat_pregunta_opciones')->result_array();
             
             
             
@@ -364,7 +373,7 @@ class Admin extends Admin_Controller {
         }
         ///Asignamos las respuestas de las preguntas dinamicas
         $fields = $this->encuesta->set_values($encuesta->pregunta)
-                            ->build_form($cuestionario->id); 
+                            ->build_form($cuestionario->id,$cuestionario->tipo); 
                             
       
         $this->template->title($this->module_details['name'])
