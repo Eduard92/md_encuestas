@@ -3,9 +3,9 @@
 
 class Encuesta
 {
-	public $values = array();
+    public $values = array();
 
-	// --------------------------------------------------------------------------
+    // --------------------------------------------------------------------------
 
     public function __construct()
     {
@@ -127,7 +127,7 @@ class Encuesta
     {
         if(empty($tipo)==true && $tipo != 1)
         {
-$data = array();
+        $data = array();
         
 
 
@@ -137,7 +137,7 @@ $data = array();
                         ->order_by('ordering')
                         ->get_all();                
         
-                        
+          $html='';              
         foreach($preguntas as $pregunta)
         {
             if(!isset($data[$pregunta->id_pregunta]))
@@ -229,7 +229,8 @@ $data = array();
                        
                              $data[$pregunta->id_pregunta]['opciones'][] = array
                             (
-                                'input' =>   $html
+                                'input' =>   $html,
+                                 'label' =>   $respuesta->respuesta
                             );
                              
                             }  

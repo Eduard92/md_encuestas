@@ -1,9 +1,9 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 class Admin extends Admin_Controller {
-	protected $section='encuestas';
-	public function __construct()
-	{
-		parent::__construct();
+    protected $section='encuestas';
+    public function __construct()
+    {
+        parent::__construct();
         $this->lang->load('encuesta');
         $this->load->library('encuesta');
         $this->load->model(array(
@@ -15,47 +15,47 @@ class Admin extends Admin_Controller {
         $this->config->load('files/files');
         $this->_path = FCPATH.rtrim($this->config->item('files:path'), DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR;
         $this->validation_rules = array(
-				     array(
+                     array(
                         'field' => 'activo',
-						'label' => 'Activo',
-						'rules' => 'trim|required'
+                        'label' => 'Activo',
+                        'rules' => 'trim|required'
                      ),
                      
-					 'edad'=>array(
-						'field' => 'edad',
-						'label' => 'Edad',
-						'rules' => 'trim|integer'
-						),
+                     'edad'=>array(
+                        'field' => 'edad',
+                        'label' => 'Edad',
+                        'rules' => 'trim|integer'
+                        ),
                      'sexo'=>array(
-						'field' => 'sexo',
-						'label' => 'Sexo',
-						'rules' => 'trim'
-						),
+                        'field' => 'sexo',
+                        'label' => 'Sexo',
+                        'rules' => 'trim'
+                        ),
                     'email'=>array(
-						'field' => 'email',
-						'label' => 'Correo electrónico',
-						'rules' => 'trim|valid_email'
-						),   
+                        'field' => 'email',
+                        'label' => 'Correo electrónico',
+                        'rules' => 'trim|valid_email'
+                        ),   
                     'social_facebook'=>array(
-						'field' => 'social_facebook',
-						'label' => 'Facebook',
-						'rules' => 'trim'
-						),  
+                        'field' => 'social_facebook',
+                        'label' => 'Facebook',
+                        'rules' => 'trim'
+                        ),  
                     'social_twitter'=>array(
-						'field' => 'social_twitter',
-						'label' => 'Twitter',
-						'rules' => 'trim'
-						), 
+                        'field' => 'social_twitter',
+                        'label' => 'Twitter',
+                        'rules' => 'trim'
+                        ), 
                     'social_whatsapp'=>array(
-						'field' => 'social_whatsapp',
-						'label' => 'Instagram',
-						'rules' => 'trim'
-						),   
+                        'field' => 'social_whatsapp',
+                        'label' => 'Instagram',
+                        'rules' => 'trim'
+                        ),   
                     'social_otro'=>array(
-						'field' => 'social_otro',
-						'label' => 'Otra red social',
-						'rules' => 'trim'
-						),                       
+                        'field' => 'social_otro',
+                        'label' => 'Otra red social',
+                        'rules' => 'trim'
+                        ),                       
           );
     }
     
@@ -66,10 +66,10 @@ class Admin extends Admin_Controller {
         
         
         $this->template->title($this->module_details['name'])
-			->set('asignaciones',$asignaciones)
-			->set('cuestionarios',$cuestionarios)
+            ->set('asignaciones',$asignaciones)
+            ->set('cuestionarios',$cuestionarios)
             
-			->build('admin/init');
+            ->build('admin/init');
     }
     function delete()
     {
@@ -273,7 +273,7 @@ class Admin extends Admin_Controller {
        
         
         $this->template->title($this->module_details['name'])
-		    ->append_js('module::encuesta.controller.js')
+            ->append_js('module::encuesta.controller.js')
             //->enable_parser(true)
             ->append_metadata('<script type="text/javascript">var encuestas='.($encuestas?json_encode($encuestas):'[]').';</script>')
            
@@ -284,7 +284,7 @@ class Admin extends Admin_Controller {
             ->set('id_cuestionario',$id_cuestionario)
             ->set('asignacion',$asignacion)
             //->set('centros',$this->centro_m->dropdown('id','nombre'))
-			->build('admin/index');
+            ->build('admin/index');
     }
  
     function cuestionario($id='')
@@ -298,12 +298,12 @@ class Admin extends Admin_Controller {
                                 ->get_all();
         
         $this->template->title($this->module_details['name'])
-		  
+          
             ->enable_parser(true)
             ->set('id',$id)
             ->set('tipo','cuestionario')
             ->set('encuestas',$encuestas)
-			->build('admin/index');
+            ->build('admin/index');
     }
     
     function edit($id)
@@ -377,15 +377,15 @@ class Admin extends Admin_Controller {
                             
       
         $this->template->title($this->module_details['name'])
-			//->set('items',$this->cuestionario_m->get_all())
-			 ->set('fields',$fields)
+            //->set('items',$this->cuestionario_m->get_all())
+             ->set('fields',$fields)
             ->enable_parser(true)
             ->set('tipo','cuestionario')
             ->set('id',$id)
             ->set('cuestionario',$cuestionario)
             ->set('encuesta',$encuesta)
             ->set('asignacion',$asignacion)
-			->build('admin/form');
+            ->build('admin/form');
     }
     function create($id_cuestionario=0)
     {
@@ -411,13 +411,13 @@ class Admin extends Admin_Controller {
             }
             
             
-			redirect('admin/encuestas/'.$tipo.'/'.$id);
+            redirect('admin/encuestas/'.$tipo.'/'.$id);
         }
         
         foreach ($this->validation_rules as $rule)
-		{
-			$encuesta->{$rule['field']} = $this->input->post($rule['field']);
-		}
+        {
+            $encuesta->{$rule['field']} = $this->input->post($rule['field']);
+        }
         /*switch($tipo){
             case 'cuestionario':
                 $id_cuestionario = $id;
@@ -428,14 +428,14 @@ class Admin extends Admin_Controller {
     
         //print_r($fields);
         $this->template->title($this->module_details['name'])
-			//->set('items',$this->cuestionario_m->get_all())
-			 ->set('fields',$fields)
+            //->set('items',$this->cuestionario_m->get_all())
+             ->set('fields',$fields)
              ->set('cuestionario',$cuestionario)
             ->enable_parser(true)
             ->set('tipo','cuestionario')
             //->set('id',$id)
             ->set('encuesta',$encuesta)
-			->build('admin/form');
+            ->build('admin/form');
     }
     function reporte($id_cuestionario=0,$id_asignacion=0,$group='')
     {
@@ -526,14 +526,15 @@ class Admin extends Admin_Controller {
             }
             
         }
-       
-        $fields = $this->encuesta->build_form($id_cuestionario); 
+       $tipo = 1;
+        $fields = $this->encuesta->build_form($id_cuestionario,$tipo); 
         
+
         $all = $this->encuesta_m->where($base_where)
                         
                     
                     ->get_all();
-                    
+               
         if(!$all || !$groups)
         {
             $result['message'] = lang('global:not_found');
@@ -541,7 +542,7 @@ class Admin extends Admin_Controller {
             exit();
         }
         
-        
+         
        $result['status'] = true;
         
         foreach($all as $item)
@@ -551,7 +552,7 @@ class Admin extends Admin_Controller {
             if($item->activo == 0)
             {
                 $result['data']['inactivos'] ++;
-            } 
+            }  
         }
         
    
@@ -564,12 +565,14 @@ class Admin extends Admin_Controller {
             if($field['tipo'] != 'text'){
                 foreach($field['opciones'] as &$opcion)
                 {
+                       
                     $opcion['cantidad'] = $this->db->where(array_merge($base_where,array(
                                 'id_pregunta'=> $field['id'],
                                 'respuesta'  => $opcion['label']
                                 )))
                                 ->join('encuestas','encuestas.id=encuesta_respuestas.id_encuesta')
                                 ->count_all_results('encuesta_respuestas');
+                                
                 }
             }
             else
@@ -627,7 +630,7 @@ class Admin extends Admin_Controller {
                 $active_sheet->getStyle('A')->getAlignment()->setWrapText(true);
                 $active_sheet->getColumnDimension('A')->setWidth(32);
                 $dataseriesLabels = array(
-	                  new PHPExcel_Chart_DataSeriesValues('String', 'Worksheet!$B$'.$row_active, NULL, 1),
+                      new PHPExcel_Chart_DataSeriesValues('String', 'Worksheet!$B$'.$row_active, NULL, 1),
                 );
                 $total = 0;
                 foreach($pregunta['opciones'] as $opcion)
@@ -638,52 +641,52 @@ class Admin extends Admin_Controller {
                 }
                 
                 $xAxisTickValues = array(
-                	new PHPExcel_Chart_DataSeriesValues('String', 'Worksheet!$A$'.($row_active+1).':$A$'.count($rows_array), NULL, 4),//Respuesta1 a RespuestaN
+                    new PHPExcel_Chart_DataSeriesValues('String', 'Worksheet!$A$'.($row_active+1).':$A$'.count($rows_array), NULL, 4),//Respuesta1 a RespuestaN
                    
                 );
                 $dataSeriesValues = array(
-                	new PHPExcel_Chart_DataSeriesValues('Number', 'Worksheet!$B$'.($row_active+1).':$B$'.count($rows_array), NULL, 4),
+                    new PHPExcel_Chart_DataSeriesValues('Number', 'Worksheet!$B$'.($row_active+1).':$B$'.count($rows_array), NULL, 4),
                 
                 );
-                //	Build the dataseries
+                //  Build the dataseries
                 $series = new PHPExcel_Chart_DataSeries(
-                	PHPExcel_Chart_DataSeries::TYPE_BARCHART,		// plotType
-                	PHPExcel_Chart_DataSeries::GROUPING_STANDARD,	// plotGrouping
-                	range(0, count($dataSeriesValues)-1),			// plotOrder
-                	$dataseriesLabels,								// plotLabel
-                	$xAxisTickValues,								// plotCategory
-                	$dataSeriesValues								// plotValues
+                    PHPExcel_Chart_DataSeries::TYPE_BARCHART,       // plotType
+                    PHPExcel_Chart_DataSeries::GROUPING_STANDARD,   // plotGrouping
+                    range(0, count($dataSeriesValues)-1),           // plotOrder
+                    $dataseriesLabels,                              // plotLabel
+                    $xAxisTickValues,                               // plotCategory
+                    $dataSeriesValues                               // plotValues
                 );
-                //	Set additional dataseries parameters
-                //		Make it a vertical column rather than a horizontal bar graph
+                //  Set additional dataseries parameters
+                //      Make it a vertical column rather than a horizontal bar graph
                 $series->setPlotDirection(PHPExcel_Chart_DataSeries::DIRECTION_COL);
                 
-                //	Set the series in the plot area
+                //  Set the series in the plot area
                 $plotarea = new PHPExcel_Chart_PlotArea(NULL, array($series));
-                //	Set the chart legend
+                //  Set the chart legend
                 $legend = new PHPExcel_Chart_Legend(PHPExcel_Chart_Legend::POSITION_RIGHT, NULL, false);
                 
                 $title = new PHPExcel_Chart_Title($pregunta['titulo']);
                 $yAxisLabel = new PHPExcel_Chart_Title('Respuestas');
                 $rows_array[] = array('TOTAL',$total);
                 
-                //	Create the chart
+                //  Create the chart
                 $chart = new PHPExcel_Chart(
-                	'chart1',		// name
-                	$title,			// title
-                	$legend,		// legend
-                	$plotarea,		// plotArea
-                	true,			// plotVisibleOnly
-                	0,				// displayBlanksAs
-                	NULL,			// xAxisLabel
-                	$yAxisLabel		// yAxisLabel
+                    'chart1',       // name
+                    $title,         // title
+                    $legend,        // legend
+                    $plotarea,      // plotArea
+                    true,           // plotVisibleOnly
+                    0,              // displayBlanksAs
+                    NULL,           // xAxisLabel
+                    $yAxisLabel     // yAxisLabel
                 );
                 
-                //	Set the position where the chart should appear in the worksheet
+                //  Set the position where the chart should appear in the worksheet
                 $chart->setTopLeftPosition('C'.($row_active-1));
                 $chart->setBottomRightPosition('L'.($row_active+count($pregunta['opciones'])+4));
                 
-                //	Add the chart to the worksheet
+                //  Add the chart to the worksheet
                 $active_sheet->addChart($chart);
                 
                 
@@ -730,8 +733,8 @@ class Admin extends Admin_Controller {
     function export($id_cuestionario,$id_asignacion='')
     {
         ini_set('memory_limit','600M');
-   	    $this->load->helper('download');
-		$this->load->library('format');
+        $this->load->helper('download');
+        $this->load->library('format');
         
         $group      = $this->input->get('group');
         $activo     = $this->input->get('activo');
